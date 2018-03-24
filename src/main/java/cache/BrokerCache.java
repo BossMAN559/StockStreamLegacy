@@ -26,9 +26,9 @@ public class BrokerCache {
         @Override
         public void run() {
             try {
-                updateAssets();
+                /*updateAssets();
                 updateAccountBalance();
-                updateHistoricalValue();
+                updateHistoricalValue();*/
             } catch (final Exception e) {
                 log.warn(e.getMessage(), e);
             }

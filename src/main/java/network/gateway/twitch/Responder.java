@@ -3,18 +3,21 @@ package network.gateway.twitch;
 
 import application.Config;
 import cache.InfoMessageCache;
+import cache.InstrumentCache;
 import cache.PlayerScoreCache;
 import computer.TimeComputer;
-import data.MarketEvent;
+import data.Quote;
 import environment.OBSManager;
 import environment.android.AndroidManager;
 import environment.jukebox.Jukebox;
+import exception.RobinhoodException;
 import logic.MarketClock;
 import logic.Scheduler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import network.gateway.broker.Broker;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.pircbotx.hooks.Event;
@@ -84,6 +87,12 @@ public class Responder extends ListenerAdapter {
     @Autowired
     private Scheduler scheduler;
 
+    @Autowired
+    private Broker broker;
+
+    @Autowired
+    private InstrumentCache instrumentCache;
+
 
     @PostConstruct
     public void init() {
@@ -152,7 +161,31 @@ public class Responder extends ListenerAdapter {
 
         final String sender = event.getUser().getNick();
 
-        if ("!score".equalsIgnoreCase(eventMessage)) {
+
+        if (instrumentCache.getValidSymbols().contains(eventMessage.substring(1).toUpperCase())) {
+
+            final String symbol = eventMessage.substring(1).toUpperCase();
+            final StringBuilder stringBuilder = new StringBuilder();
+
+            try {
+                final Quote stockQuote = new Quote(broker.getQuote(symbol));
+
+                stringBuilder.append(String.format(" %s last price is around $%.2f. Bid [%s @ $%.2f] Ask [%s @ $%.2f]",
+                                                   symbol, stockQuote.getMostRecentPrice(), stockQuote.getBidSize(), stockQuote.getBidPrice(),
+                                                   stockQuote.getAskSize(), stockQuote.getAskPrice()));
+
+                final String changeOperand = stockQuote.getPercentChange() < 0 ? "" : "+";
+                stringBuilder.append(String.format(" Today %s%.2f%%.", changeOperand, stockQuote.getPercentChange()));
+            } catch (final RobinhoodException e) {
+                log.warn("No quote for symbol {}", symbol, e);
+            }
+
+            stringBuilder.append(" https://finance.yahoo.com/quote/").append(symbol);
+
+            messageEventResponseQueue.add(new MessageEventResponse(event, sender, stringBuilder.toString()));
+        }
+
+        /*if ("!score".equalsIgnoreCase(eventMessage)) {
             final String response = String.valueOf(this.playerScoreCache.getScore(sender));
             messageEventResponseQueue.add(new MessageEventResponse(event, sender, response));
         }
@@ -170,7 +203,7 @@ public class Responder extends ListenerAdapter {
             final String response = String.format("Next stream starts when the market opens at %s", nextMarketOpen.get());
             messageEventResponseQueue.add(new MessageEventResponse(event, sender, response));
             return;
-        }
+        }*/
 
         if (Config.ADMINS_TWITCH.contains(sender.toLowerCase())) {
 
@@ -196,11 +229,11 @@ public class Responder extends ListenerAdapter {
             }
         }
 
-        if ((eventMessage.equalsIgnoreCase("!music") || eventMessage.equalsIgnoreCase("!song"))) {
+        /*if ((eventMessage.equalsIgnoreCase("!music") || eventMessage.equalsIgnoreCase("!song"))) {
             final String trackUrl = this.jukebox.getCurrentTrackURL();
             messageEventResponseQueue.add(new MessageEventResponse(event, sender, trackUrl));
             return;
-        }
+        }*/
 
         final Optional<String> urlForCommand = this.infoMessageCache.getURLForId(event.getMessage());
         urlForCommand.ifPresent(url -> messageEventResponseQueue.add(new MessageEventResponse(event, sender, url)));

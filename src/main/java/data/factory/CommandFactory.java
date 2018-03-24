@@ -26,7 +26,7 @@ public class CommandFactory {
 
         final String message = input.trim().toUpperCase();
 
-        if ("!hold".equalsIgnoreCase(message) || "!hodl".equalsIgnoreCase(message)) {
+        if ("!skip".equalsIgnoreCase(message) || "!hodl".equalsIgnoreCase(message)) {
             return Optional.of(new Command(ActionType.HOLD, StringUtils.EMPTY));
         }
 

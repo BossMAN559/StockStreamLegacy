@@ -105,6 +105,10 @@ public class Robinhood implements Broker {
     }
 
     private void doLoginRoutine() {
+        if (StringUtils.isEmpty(this.username) || StringUtils.isEmpty(this.password)) {
+            return;
+        }
+
         try {
             this.doLogin();
             this.acquireAccountInfo();
@@ -326,7 +330,6 @@ public class Robinhood implements Broker {
 
     @Override
     public List<Map<String, String>> getQuotes(final Collection<String> symbols) throws RobinhoodException {
-        verifyLoginStatus();
 
         if (CollectionUtils.isEmpty(symbols)) {
             return Collections.emptyList();
@@ -357,7 +360,6 @@ public class Robinhood implements Broker {
 
     @Override
     public Map<String, String> getQuote(final String symbol) throws RobinhoodException {
-        verifyLoginStatus();
 
         final Optional<HTTPResult> httpResult =
                 this.httpUtil.executeHTTPGetRequest(new HTTPQuery(endpoints.get("quotes"), ImmutableMap.of("symbols", symbol), headers));
@@ -576,7 +578,6 @@ public class Robinhood implements Broker {
     }
 
     public MarketState getMarketStateForDate(final DateTime dateTime) throws RobinhoodException {
-        verifyLoginStatus();
 
         final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
         final String dateString = formatter.print(dateTime);

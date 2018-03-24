@@ -36,7 +36,6 @@ public class InfoMessageCache {
     private Map<String, InfoMessage> idToInfo = new ConcurrentHashMap<>();
     private Set<String> storedURLs = Collections.synchronizedSet(new HashSet<>());
     private List<InfoMessage> messages = Collections.synchronizedList(new ArrayList<>());
-    private ConcurrentLinkedQueue<InfoMessage> priorityInfoMessages = new ConcurrentLinkedQueue<>();
 
     private int iterator = 0;
     private int idCount = 0;
@@ -57,12 +56,6 @@ public class InfoMessageCache {
             return Collections.emptyMap();
         }
 
-        if (priorityInfoMessages.size() > 0) {
-            InfoMessage priorityMessage = priorityInfoMessages.poll();
-            idToInfo.put("!last", priorityMessage);
-            return ImmutableMap.of("!last", priorityMessage);
-        }
-
         if (iterator > messages.size()) {
             iterator = 0;
         }
@@ -80,7 +73,7 @@ public class InfoMessageCache {
 
     private synchronized Void addOrderResult(final OrderResult orderResult) {
         InfoMessage infoMessage = this.infoMessageFactory.constructInfoMessageFromOrderResult(orderResult);
-        priorityInfoMessages.add(infoMessage);
+        idToInfo.put("!last", infoMessage);
         return null;
     }
 

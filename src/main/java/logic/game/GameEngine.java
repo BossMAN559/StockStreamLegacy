@@ -1,6 +1,5 @@
 package logic.game;
 
-import application.Config;
 import cache.BrokerCache;
 import com.google.common.annotations.VisibleForTesting;
 import computer.TimeComputer;
@@ -61,6 +60,12 @@ public class GameEngine {
         final int votes = bestRankedCommand.getVotes();
         final String symbol = bestCommand.getParameter();
 
+
+        final OrderResult tickResult = new OrderResult(bestCommand.getAction(), symbol, votes, OrderStatus.OK);
+        this.pubSub.publish(OrderResult.class, tickResult);
+        return null;
+
+        /*
         if (!this.timeComputer.isMarketOpenNow()) {
             final OrderResult orderResult = new OrderResult(bestCommand.getAction(), symbol, votes, OrderStatus.MARKET_CLOSED);
             this.pubSub.publish(OrderResult.class, orderResult);
@@ -106,7 +111,7 @@ public class GameEngine {
         final OrderResult tickResult = new OrderResult(bestCommand.getAction(), symbol, votes, orderStatus);
         this.pubSub.publish(OrderResult.class, tickResult);
 
-        return null;
+        return null;*/
     }
 
     private OrderStatus processSell(final Command command) throws RobinhoodException {

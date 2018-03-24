@@ -12,7 +12,6 @@ import utils.RandomUtil;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Jukebox {
@@ -35,7 +34,7 @@ public class Jukebox {
 
     @PostConstruct
     public void init() {
-        this.scheduler.scheduleJob(this::jukeboxLoop, 10, 1, TimeUnit.SECONDS);
+        //this.scheduler.scheduleJob(this::jukeboxLoop, 10, 1, TimeUnit.SECONDS);
     }
 
     public String getCurrentTrackURL() {

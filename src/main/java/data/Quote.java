@@ -41,6 +41,21 @@ public class Quote {
         return percentReturn;
     }
 
+    public int getBidSize() {
+        return Integer.valueOf(robinhoodQuote.getOrDefault("bid_size", "0"));
+    }
+
+    public int getAskSize() {
+        return Integer.valueOf(robinhoodQuote.getOrDefault("ask_size", "0"));
+    }
+
+    public double getBidPrice() {
+        return Double.valueOf(robinhoodQuote.getOrDefault("bid_price", "0.0"));
+    }
+
+    public double getAskPrice() {
+        return Double.valueOf(robinhoodQuote.getOrDefault("ask_price", "0.0"));
+    }
 
     public String getSymbol() {
         return robinhoodQuote.get("symbol");

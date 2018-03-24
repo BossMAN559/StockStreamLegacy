@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.collect.ImmutableMap;
 import computer.TimeComputer;
-import data.JobInterval;
 import logic.Scheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class ScoreUploader {
@@ -39,7 +37,7 @@ public class ScoreUploader {
 
     @PostConstruct
     public void init() {
-        scheduler.scheduleJob(this::uploadScores, new JobInterval(1, 5, TimeUnit.MINUTES));
+        //scheduler.scheduleJob(this::uploadScores, new JobInterval(1, 5, TimeUnit.MINUTES));
     }
 
     private void uploadScores() {

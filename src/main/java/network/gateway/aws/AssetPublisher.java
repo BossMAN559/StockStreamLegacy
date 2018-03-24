@@ -14,7 +14,6 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import data.Asset;
-import data.JobInterval;
 import data.Order;
 import exception.RobinhoodException;
 import logic.Scheduler;
@@ -32,7 +31,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -115,7 +113,7 @@ public class AssetPublisher {
 
     @PostConstruct
     public void init() {
-        scheduler.scheduleJob(this::publishAssets, new JobInterval(1, 5, TimeUnit.MINUTES));
+        //scheduler.scheduleJob(this::publishAssets, new JobInterval(1, 5, TimeUnit.MINUTES));
     }
 
     private void publishAssets() {

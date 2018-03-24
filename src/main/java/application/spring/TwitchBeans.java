@@ -43,7 +43,7 @@ public class TwitchBeans {
         return new org.pircbotx.Configuration.Builder().setAutoNickChange(false)
                                                        .setOnJoinWhoEnabled(false)
                                                        .setName("stockstream")
-                                                       .addServer("192.168.1.107")
+                                                       .addServer("localhost")
                                                        .addAutoJoinChannel("#stockstream")
                                                        .addListener(cacheBeans.sortedInstrumentCache())
                                                        .addListener(cacheBeans.playerCommandCache())

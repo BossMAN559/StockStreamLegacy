@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class MusicCache {
@@ -29,7 +28,7 @@ public class MusicCache {
 
     @PostConstruct
     public void init() {
-        this.scheduler.scheduleJob(this::reloadMusicFiles, 5, 500, TimeUnit.SECONDS);
+        //this.scheduler.scheduleJob(this::reloadMusicFiles, 5, 500, TimeUnit.SECONDS);
     }
 
     private synchronized void reloadMusicFiles() {

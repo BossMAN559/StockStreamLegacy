@@ -1,7 +1,6 @@
 package network.gateway.information;
 
 
-import application.Config;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -53,12 +52,9 @@ public class NewsAPI {
     @Autowired
     private Scheduler scheduler;
 
-    public NewsAPI() {
-    }
-
     @PostConstruct
     public void init() {
-        this.scheduler.scheduleJob(this::refreshInfo, Config.MEDIA_REFRESH);
+        //this.scheduler.scheduleJob(this::refreshInfo, Config.MEDIA_REFRESH);
     }
 
     private String constructURL(final String source, final String sortOrder) {

@@ -23,8 +23,8 @@ public class Config {
 
     public static final Set<String> ADMINS_TWITCH = ImmutableSet.of("stockstream", "michrob", "aveao");
 
-    public static final String RH_UN = "<robinhood_username>";
-    public static final String RH_PW = "<robinhood_password>";
+    public static final String RH_UN = "";
+    public static final String RH_PW = "";
 
     public static final String AFFILIATE_CODE = "tag=stockstream0e-20";
 
